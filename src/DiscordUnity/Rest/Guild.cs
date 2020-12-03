@@ -26,22 +26,22 @@ namespace DiscordUnity
             => SyncInherit(Patch<object>($"/guilds/{guildId}/channels", new { id = channelId, position }), r => true);
 
         public static Task<RestResult<DiscordServerMember>> GetServerMember(string guildId, string userId)
-            => SyncInherit(Get<GuildMemberModel>($"/guilds/{guildId}/mebmers/{userId}"), r => new DiscordServerMember(r));
+            => SyncInherit(Get<GuildMemberModel>($"/guilds/{guildId}/members/{userId}"), r => new DiscordServerMember(r));
         public static Task<RestResult<DiscordServerMember[]>> GetServerMembers(string guildId, int? limit, string after)
-            => SyncInherit(Get<GuildMemberModel[]>($"/guilds/{guildId}/mebmers", new { limit, after }), r => r.Select(x => new DiscordServerMember(x)).ToArray());
+            => SyncInherit(Get<GuildMemberModel[]>($"/guilds/{guildId}/members", new { limit, after }), r => r.Select(x => new DiscordServerMember(x)).ToArray());
         public static Task<RestResult<DiscordServerMember>> AddServerMember(string guildId, string userId, string accessToken, string nick, string[] roles, bool? mute, bool? deaf)
-            => SyncInherit(Put<GuildMemberModel>($"/guilds/{guildId}/mebmers/{userId}", new { accessToken, nick, roles, mute, deaf }), r => new DiscordServerMember(r));
+            => SyncInherit(Put<GuildMemberModel>($"/guilds/{guildId}/members/{userId}", new { accessToken, nick, roles, mute, deaf }), r => new DiscordServerMember(r));
         public static Task<RestResult<DiscordServerMember>> ModifyServerMember(string guildId, string userId, string nick, string[] roles, bool? mute, bool? deaf, string channelId)
-            => SyncInherit(Patch<GuildMemberModel>($"/guilds/{guildId}/mebmers/{userId}", new { nick, roles, mute, deaf, channelId }), r => new DiscordServerMember(r));
+            => SyncInherit(Patch<GuildMemberModel>($"/guilds/{guildId}/members/{userId}", new { nick, roles, mute, deaf, channelId }), r => new DiscordServerMember(r));
         public static Task<RestResult<bool>> ModifyUserNick(string guildId, string nick)
-            => SyncInherit(Patch<object>($"/guilds/{guildId}/mebmers/@me/nick", new { nick }), r => true);
+            => SyncInherit(Patch<object>($"/guilds/{guildId}/members/@me/nick", new { nick }), r => true);
         public static Task<RestResult<bool>> RemoveServerMember(string guildId, string userId)
-            => SyncInherit(Delete<object>($"/guilds/{guildId}/mebmers/{userId}"), r => true);
+            => SyncInherit(Delete<object>($"/guilds/{guildId}/members/{userId}"), r => true);
 
         public static Task<RestResult<bool>> AddServerMemberRole(string guildId, string userId, string roleId)
-            => SyncInherit(Put<object>($"/guilds/{guildId}/mebmers/{userId}/roles/{roleId}", null), r => true);
+            => SyncInherit(Put<object>($"/guilds/{guildId}/members/{userId}/roles/{roleId}", null), r => true);
         public static Task<RestResult<bool>> RemoveServerMemberRole(string guildId, string userId, string roleId)
-            => SyncInherit(Delete<object>($"/guilds/{guildId}/mebmers/{userId}/roles/{roleId}", null), r => true);
+            => SyncInherit(Delete<object>($"/guilds/{guildId}/members/{userId}/roles/{roleId}", null), r => true);
 
         public static Task<RestResult<object[]>> GetServerBans(string guildId)
             => SyncInherit(Get<GuildBanModel[]>($"/guilds/{guildId}/bans"), r => (object[])r);

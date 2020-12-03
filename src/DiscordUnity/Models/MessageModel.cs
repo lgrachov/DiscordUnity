@@ -30,6 +30,23 @@ namespace DiscordUnity.Models
         public MessageFlags Flags { get; set; }
     }
 
+    internal class ReactionModel
+    {
+        public int Count { get; set; }
+        public bool Me { get; set; }
+        public EmojiModel Emoji { get; set; }
+    }
+
+    internal class MessageReactionModel
+    {
+        public string UserId { get; set; }
+        public string MessageId { get; set; }
+        public GuildMemberModel Member { get; set; }
+        public EmojiModel Emoji { get; set; }
+        public string ChannelId { get; set; }
+        public string GuildId { get; set; }
+    }
+
     internal class ChannelMentionModel
     {
         public string Id { get; set; }
@@ -127,22 +144,9 @@ namespace DiscordUnity.Models
         public bool? Inline { get; set; }
     }
 
-    internal class ReactionModel
-    {
-        public int Count { get; set; }
-        public bool Me { get; set; }
-        public EmojiModel Emoji { get; set; }
-    }
+    
 
-    internal class MessageReactionModel
-    {
-        public string UserId { get; set; }
-        public string ChannelId { get; set; }
-        public string MessageId { get; set; }
-        public string GuildId { get; set; }
-        public GuildMemberModel Member { get; set; }
-        public EmojiModel Emoji { get; set; }
-    }
+    
 
     public enum MessageType
     {

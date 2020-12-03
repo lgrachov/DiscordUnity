@@ -354,7 +354,7 @@ namespace DiscordUnity
                                 Sync(() => interfaces.OnDiscordAPIResumed());
                             }
                             break;
-                        case "reonnect":
+                        case "reconnect":
                             {
                                 Logger.Log("Reconnect.");
                                 await Resume();
@@ -505,47 +505,94 @@ namespace DiscordUnity
                             {
                                 var guildEmojis = payload.As<GuildEmojisModel>().Data;
                                 Servers[guildEmojis.GuildId].Emojis = guildEmojis.Emojis.ToDictionary(x => x.Id, x => new DiscordEmoji(x));
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerEmojisUpdated(Servers[guildEmojis.GuildId], new DiscordEmoji[Servers[guildEmojis.GuildId].Emojis.Count]);
+                                });
+
                             }
                             break;
                         case "guild_member_add":
                             {
                                 var guildMember = payload.As<GuildMemberModel>().Data;
                                 Servers[guildMember.GuildId].Members[guildMember.User.Id] = new DiscordServerMember(guildMember);
-                            }
-                            break;
-                        case "guild_member_remove":
-                            {
-                                var guildMember = payload.As<GuildMemberModel>().Data;
-                                Servers[guildMember.GuildId].Members.Remove(guildMember.User.Id);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerMemberJoined(Servers[guildMember.GuildId], Servers[guildMember.GuildId].Members[guildMember.User.Id]);
+                                });
                             }
                             break;
                         case "guild_member_update":
                             {
                                 var guildMember = payload.As<GuildMemberModel>().Data;
                                 Servers[guildMember.GuildId].Members[guildMember.User.Id] = new DiscordServerMember(guildMember);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerMemberUpdated(Servers[guildMember.GuildId], Servers[guildMember.GuildId].Members[guildMember.User.Id]);
+                                });
+
                             }
                             break;
+                        case "guild_member_remove":
+                            {
+                                var guildMember = payload.As<GuildMemberModel>().Data;
+                                Servers[guildMember.GuildId].Members.Remove(guildMember.User.Id);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerMemberLeft(Servers[guildMember.GuildId], Servers[guildMember.GuildId].Members[guildMember.User.Id]);
+                                });
+                            }
+                            break;
+                        
                         case "guild_members_chunk":
                             {
                                 var guildMembersChunk = payload.As<GuildMembersChunkModel>().Data;
+                                /*
+                                Servers[guildMembersChunk.GuildId].Members = new DiscordServerMember[guildMembersChunk];
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerMembersChunk(Servers[guildMembersChunk.GuildId], Servers[guildMembersChunk.GuildId].Members, guildMembersChunk.NotFound, guildMembersChunk.Presences );
+                                });
+                                */
+
                             }
                             break;
                         case "guild_role_create":
                             {
                                 var guildRole = payload.As<GuildRoleModel>().Data;
                                 Servers[guildRole.GuildId].Roles[guildRole.Role.Id] = new DiscordRole(guildRole.Role);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerRoleCreated(Servers[guildRole.GuildId], Servers[guildRole.GuildId].Roles[guildRole.Role.Id]);
+                                });
                             }
                             break;
                         case "guild_role_update":
                             {
                                 var guildRole = payload.As<GuildRoleModel>().Data;
                                 Servers[guildRole.GuildId].Roles[guildRole.Role.Id] = new DiscordRole(guildRole.Role);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerRoleUpdated(Servers[guildRole.GuildId], Servers[guildRole.GuildId].Roles[guildRole.Role.Id]);
+                                });
                             }
                             break;
                         case "guild_role_delete":
                             {
                                 var guildRoleId = payload.As<GuildRoleIdModel>().Data;
                                 Servers[guildRoleId.GuildId].Roles.Remove(guildRoleId.RoleId);
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnServerRoleRemove(Servers[guildRoleId.GuildId], Servers[guildRoleId.GuildId].Roles[guildRoleId.RoleId]);
+                                });
                             }
                             break;
 
@@ -555,12 +602,22 @@ namespace DiscordUnity
                             {
                                 var invite = payload.As<InviteModel>().Data;
                                 Servers[invite.GuildId].Invites[invite.Code] = new DiscordInvite(invite);
+
+                                Sync(() =>
+                                {
+                                    interfaces.InviteCreated(Servers[invite.GuildId], Servers[invite.GuildId].Invites[invite.Code]);
+                                });
                             }
                             break;
                         case "invite_delete":
                             {
                                 var invite = payload.As<InviteModel>().Data;
                                 Servers[invite.GuildId].Invites.Remove(invite.Code);
+
+                                Sync(() =>
+                                {
+                                    interfaces.InviteDeleted(Servers[invite.GuildId], Servers[invite.GuildId].Invites[invite.Code]);
+                                });
                             }
                             break;
 
@@ -599,26 +656,54 @@ namespace DiscordUnity
                         case "message_delete_bulk":
                             {
                                 var messageBulk = payload.As<MessageBulkModel>().Data;
+
+                                //need to add
+                                Sync(() =>
+                                {
+                                    interfaces.OnMessageDeletedBulk(messageBulk.Ids);
+                                });
                             }
                             break;
                         case "message_reaction_add":
                             {
                                 var messageReaction = payload.As<MessageReactionModel>().Data;
+                                var message = payload.As<MessageModel>().Data;
+                                var reaction = payload.As<ReactionModel>().Data;
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnMessageReactionAdded(new DiscordMessageReaction (messageReaction));
+                                });
                             }
                             break;
                         case "message_reaction_remove":
                             {
                                 var messageReaction = payload.As<MessageReactionModel>().Data;
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnMessageReactionRemoved(new DiscordMessageReaction(messageReaction));
+                                });
                             }
                             break;
                         case "message_reaction_remove_all":
                             {
                                 var messageReaction = payload.As<MessageReactionModel>().Data;
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnMessageAllReactionsRemoved(new DiscordMessageReaction(messageReaction));
+                                });
                             }
                             break;
                         case "message_reaction_remove_emoji":
                             {
                                 var messageReaction = payload.As<MessageReactionModel>().Data;
+
+                                Sync(() =>
+                                {
+                                    interfaces.OnMessageEmojiReactionRemoved(new DiscordMessageReaction(messageReaction));
+                                });
                             }
                             break;
 

@@ -10,10 +10,10 @@ namespace DiscordUnity.API
 
         void OnMessageDeletedBulk(string[] messageIds);
 
-        void OnMessageReactionAdded(DiscordMessage message, DiscordReaction reaction);
-        void OnMessageReactionRemoved(DiscordMessage message, DiscordReaction reaction);
+        void OnMessageReactionAdded(DiscordMessageReaction reactionMessage);
+        void OnMessageReactionRemoved(DiscordMessageReaction reactionMessage);
 
-        void OnMessageAllReactionsRemoved(DiscordMessage message, DiscordReaction reaction);
-        void OnMessageEmojiReactionRemoved(DiscordMessage message, DiscordReaction reaction);
+        void OnMessageAllReactionsRemoved(DiscordMessageReaction reactionMessage);
+        void OnMessageEmojiReactionRemoved(DiscordMessageReaction reactionMessage);
     }
 }

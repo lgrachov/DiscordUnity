@@ -16,8 +16,8 @@ namespace DiscordUnity.State
         public bool MentionEveryone { get; internal set; }
         public MessageType Type { get; internal set; }
 
-        private readonly string GuildId;
-        private readonly string ChannelId;
+        public string GuildId;
+        public string ChannelId;
 
         internal DiscordMessage(MessageModel model)
         {
@@ -47,4 +47,28 @@ namespace DiscordUnity.State
             if (model.Emoji != null) Emoji = new DiscordEmoji(model.Emoji);
         }
     }
+    //edit
+    public class DiscordMessageReaction
+    {
+        public string UserId { get; internal set; }
+        public string MessageId { get; internal set; }
+        public DiscordServerMember Member { get; internal set; }
+        public DiscordEmoji Emoji { get; internal set; }
+        public string ChannelId { get; set; }
+        public string GuildId { get; set; }
+
+        internal DiscordMessageReaction(MessageReactionModel model)
+        {
+            UserId = model.UserId;
+            MessageId = model.MessageId;
+
+            if (model.Member != null) Member = new DiscordServerMember(model.Member);
+            if (model.Emoji != null) Emoji = new DiscordEmoji(model.Emoji);
+
+            ChannelId = model.ChannelId;
+            GuildId = model.GuildId;
+
+        }
+    }
+    //edit
 }

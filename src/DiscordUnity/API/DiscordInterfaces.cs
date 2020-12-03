@@ -212,28 +212,28 @@ namespace DiscordUnity.API
                 e.OnMessageDeletedBulk(messageIds);
         }
 
-        public void OnMessageReactionAdded(DiscordMessage message, DiscordReaction reaction)
+        public void OnMessageReactionAdded(DiscordMessageReaction messageReaction)
         {
             foreach (var e in this.message)
-                e.OnMessageReactionAdded(message, reaction);
+                e.OnMessageReactionAdded(messageReaction);
         }
 
-        public void OnMessageReactionRemoved(DiscordMessage message, DiscordReaction reaction)
+        public void OnMessageReactionRemoved(DiscordMessageReaction messageReaction)
         {
             foreach (var e in this.message)
-                e.OnMessageReactionRemoved(message, reaction);
+                e.OnMessageReactionRemoved(messageReaction);
         }
 
-        public void OnMessageAllReactionsRemoved(DiscordMessage message, DiscordReaction reaction)
+        public void OnMessageAllReactionsRemoved(DiscordMessageReaction messageReaction)
         {
             foreach (var e in this.message)
-                e.OnMessageAllReactionsRemoved(message, reaction);
+                e.OnMessageAllReactionsRemoved(messageReaction);
         }
 
-        public void OnMessageEmojiReactionRemoved(DiscordMessage message, DiscordReaction reaction)
+        public void OnMessageEmojiReactionRemoved(DiscordMessageReaction messageReaction)
         {
             foreach (var e in this.message)
-                e.OnMessageEmojiReactionRemoved(message, reaction);
+                e.OnMessageEmojiReactionRemoved(messageReaction);
         }
 
 
